@@ -141,4 +141,15 @@ class AdminController extends Controller
             ->with('success', 'Data tamu berhasil diperbarui.');
     }
 
+    public function deleteGuest(Guest $guest)
+    {
+        $guestName = $guest->name;
+
+        $guest->delete();
+
+        return redirect()
+        ->route('admin.guests.index')
+        ->with('success', 'Tamu' . $guestName . ' berhasil dihapus.');
+    }
+
 }

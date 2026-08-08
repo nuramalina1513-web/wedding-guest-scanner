@@ -197,6 +197,22 @@
                 text-decoration: none;
                 font-size: 12px;
             }
+
+            .delete-button {
+                padding: 7px 10px;
+
+                background: transparent;
+                border: 1px solid #b33a3a;
+                border-radius: 8px;
+
+                color: #b33a3a;
+                font-size: 12px;
+                cursor: pointer;
+            }
+
+            .action-links form {
+                margin: 0;
+            }
         </style>
     </head>
 
@@ -321,8 +337,22 @@
                 >
                     Edit
                 </a>
+                <form 
+            action="{{ route('admin.guests.delete', $guest) }}"
+            method="POST"
+            onsubmit="return confirm('yakin ingin menghapus tamu ini?')"
+            >
+            @csrf
+            @method('DELETE')
+
+            <button
+            type="submit"
+            class="delete-button"
+            >
+                Hapus
+            </button>
+            </form>
                 </div>
-                
             </td>
         </tr>
         @endforeach
