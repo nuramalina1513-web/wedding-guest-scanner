@@ -149,7 +149,7 @@ class AdminController extends Controller
 
         return redirect()
         ->route('admin.guests.index')
-        ->with('success', 'Tamu' . $guestName . ' berhasil dihapus.');
+        ->with('success', 'Tamu ' . $guestName . ' berhasil dihapus.');
     }
 
 }

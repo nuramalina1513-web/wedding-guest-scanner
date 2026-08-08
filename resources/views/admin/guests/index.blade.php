@@ -213,6 +213,27 @@
             .action-links form {
                 margin: 0;
             }
+
+            .success-message {
+                max-width: 650px;
+                margin: 0 auto 18px;
+                padding: 13px 16px;
+
+                background: #edf8ef;
+                border: 1px solid #9cccaa;
+                border-radius: 12px;
+
+                color: #246437;
+                border: 1px solid #9cccaa;
+                border-radius: 12px;
+
+                color: #246437;
+                text-align: center;
+                font-size: 14px;
+                font-weight: bold;
+
+                transition: opacity 0.3s ease;
+            }
         </style>
     </head>
 
@@ -222,6 +243,12 @@
                 <h1>Daftar Tamu</h1>
                 <p>Kelola dan pantau seluruh tamu undangan</p>
             </div>
+
+            @if (session('success'))
+            <div class="success-message">
+            {{ session('success') }}
+            </div>
+            @endif
 
             <div class="actions">
 
@@ -408,6 +435,18 @@
             guestSearch.addEventListener('input', filterGuests);
             typeFilter.addEventListener('change', filterGuests);
             statusFilter.addEventListener('change', filterGuests);
+
+            const successMessage = document.querySelector('.success-message');
+
+            if (successMessage) {
+                setTimeout(function(){
+                    successMessage.style.opacity = 'o';
+
+                    setTimeout(function(){
+                        successMessage.remove();
+                    }, 300);
+                }, 3000);
+            }
         </script>
     </body>
     </html>
