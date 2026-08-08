@@ -19,3 +19,12 @@ Route::get('/admin/guest/{code}', [AdminController::class, 'findGuest'])
 
 Route::post('/admin/guest/{code}/confirm', [AdminController::class, 'confirm'])
 ->name('admin.guest.confirm');
+
+Route::get('/admin/guests/create', [AdminController::class, 'createGuest'])
+->name('admin.guests.create');
+
+Route::post('/admin/guests', [AdminController::class, 'storeGuest'])
+->name('admin.guests.store');
+
+Route::get('/admin/guests', [AdminController::class, 'guestList'])
+->name('admin.guests.index');

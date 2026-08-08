@@ -14,6 +14,42 @@ class AdminController extends Controller
         return view('admin.scan');
     }
 
+    public function createGuest(): View
+    {
+        return view('admin.guests.create');
+    }
+
+    public function storeGuest(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'guest_type' => 'required|in:reguler,vip',
+            'invitation_limit' => 'required|integer|min:1',
+        ]);
+
+        $lastGuest = Guest::orderBy('id', 'desc')->first();
+
+        $nextNumber = $lastGuest
+        ? $lastGuest->id + 1
+        : 1;
+
+        $code = 'WED-ARIFA-' .str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+
+        $guest = Guest::create([
+            'name' => $validated['name'],
+            'code' => $code,
+            'guest_type' => $validated['guest_type'],
+            'invitation_limit' => $validated['invitation_limit'],
+            'attended_count' => 0,
+            'scanned_at' => null,
+        ]);
+
+        return redirect()
+        ->route('admin.guests.create')
+        ->with('success', 'Tamu berhasil ditambahkan dengan kode ' . $code)
+        ->with('guest_code', $guest->code);
+    }
+
     public function findGuest(string $code): JsonResponse
     {
         $guest = Guest::where('code', $code)->first();
@@ -72,5 +108,12 @@ class AdminController extends Controller
             'message' => 'Tamu berhasil di konfirmasi',
             'guest' => $guest->fresh(),
         ]);
+    }
+
+    public function guestList(): view
+    {
+        $guests = Guest::orderBy('id', 'desc')->get();
+
+        return view('admin.guests.index', compact('guests'));
     }
 }
