@@ -116,4 +116,29 @@ class AdminController extends Controller
 
         return view('admin.guests.index', compact('guests'));
     }
+
+    public function editGuest(Guest $guest): view
+    {
+        return view('admin.guests.edit', compact('guest'));
+    }
+
+    public function updateGuest(Request $request, Guest $guest)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'guest_type' => 'required|in:reguler,vip',
+            'invitation_limit' => 'required|integer|min:1',
+        ]);
+
+        $guest->update([
+            'name' => $validated['name'],
+            'guest_type' => $validated['guest_type'],
+            'invitation_limit' => $validated['invitation_limit'],
+        ]);
+
+        return redirect()
+            ->route('admin.guests.index')
+            ->with('success', 'Data tamu berhasil diperbarui.');
+    }
+
 }

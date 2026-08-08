@@ -119,7 +119,7 @@
                 color: #821f35;
             }
 
-            .regular{
+            .reguler{
             color: #70585c;
             }
 
@@ -178,6 +178,25 @@
             .filters select {
                 min-width: 160px;
             }
+
+            .action-links {
+                display: flex;
+                gap: 7px;
+                align-items: center;
+            }
+
+            .edit-button {
+                display: inline-block;
+                padding: 7px 10px;
+
+                background: #821f35;
+                border: 1px solid #821f35;
+                border-radius: 8px;
+
+                color: white;
+                text-decoration: none;
+                font-size: 12px;
+            }
         </style>
     </head>
 
@@ -214,7 +233,7 @@
      <select id="type-filter">
      <option value="all">Semua Tipe</option>
      <option value="vip">VIP</option>
-     <option value="regular">Regular</option>
+     <option value="reguler">Reguler</option>
      </select>
 
     <select id="status-filter">
@@ -289,12 +308,21 @@
             </td>
 
             <td>
-                <a href="{{ route('guest.show', $guest->code) }}"
+                <div class="action-links">
+                    <a href="{{ route('guest.show', $guest->code) }}"
                 target="_blank"
                 class="view-button"
                 >
                     Lihat undangan
                 </a>
+                <a 
+                href="{{ route('admin.guests.edit', $guest) }}"
+                class="edit-button"
+                >
+                    Edit
+                </a>
+                </div>
+                
             </td>
         </tr>
         @endforeach

@@ -28,3 +28,12 @@ Route::post('/admin/guests', [AdminController::class, 'storeGuest'])
 
 Route::get('/admin/guests', [AdminController::class, 'guestList'])
 ->name('admin.guests.index');
+
+Route::get('/admin/guests/{guest}/edit', [AdminController::class, 'editGuest'])
+->name('admin.guests.edit');
+
+Route::put('/admin/guests/{guest}', [AdminController::class, 'updateGuest'])
+->name('admin.guests.update');
+
+Route::delete('/admin/guests/{guest}', [AdminController::class, 'deleteGuest'])
+->name('admin.guests.delete');
