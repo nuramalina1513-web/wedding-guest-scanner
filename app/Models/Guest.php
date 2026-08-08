@@ -12,6 +12,7 @@ class Guest extends Model
     protected $fillable = [
         'name',
         'code',
+        'guest_type',
         'invitation_limit',
         'attended_count',
         'scanned_at',

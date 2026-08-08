@@ -316,6 +316,11 @@
 </div>
 
 <div class="information-row">
+<span class="information-label">Tipe Tamu</span>
+<span class="information-value" id="guest-type">-</span>
+</div>
+
+<div class="information-row">
     <span class="information-label">Batas Undangan</span>
     <span class="information-value" id="guest-limit">-</span>
 </div>
@@ -364,6 +369,7 @@ Scan ulang
     const resultCard = document.getElementById('result-card');
     const guestName = document.getElementById('guest-name');
     const guestCode = document.getElementById('guest-code');
+    const guestType = document.getElementById('guest-type');
     const guestLimit = document.getElementById('guest-limit');
     const guestStatus = document.getElementById('guest-status');
     const attendedCount = document.getElementById('attended-count')
@@ -424,6 +430,10 @@ Scan ulang
 
         guestName.textContent = guest.name;
         guestCode.textContent = guest.code;
+        guestType.textContent = guest.guest_type
+        ? guest.guest_type.toUpperCase()
+        : '-';
+
         guestLimit.textContent = `${guest.invitation_limit} orang`;
         guestStatus.textContent = 'Belum check-in';
 
@@ -441,6 +451,9 @@ Scan ulang
 
     guestName.textContent = guest?.name ?? 'Tamu';
     guestCode.textContent = guest?.code ?? '-';
+    guestType.textContent = guest?.guest_type
+    ? guest.guest_type.toUpperCase()
+    : '-';
     guestLimit.textContent =guest?.invitation_limit
     ? `${guest.invitation_limit} orang`
     : '-';

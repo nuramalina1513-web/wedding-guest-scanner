@@ -18,6 +18,7 @@ class GuestSeeder extends Seeder
             ],
             [
             'name' => 'Nur Amalina',
+            'guest_type' => 'vip',
             'invitation_limit' => 2,
             'attended_count' => 0,
             'scanned_at' => null,
