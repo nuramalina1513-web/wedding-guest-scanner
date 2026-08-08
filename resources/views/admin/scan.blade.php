@@ -197,6 +197,13 @@
                 border-radius: 15px;
             }
 
+            .guest-counter {
+                display: flex;
+                justify-content: center;
+                align-item: center;
+                gap: 12px;
+            }
+
             .information-row {
                 display: flex;
                 justify-content: space-between;
@@ -338,7 +345,13 @@
         Pilih jumlah tamu yang datang
 </label>
 
-<select id="attended-count"></select>
+<div class="guest-counter">
+    <button type="button" id="minus-button">-</button>
+
+    <span id="attended-count">1</span>
+
+    <button type="button" id="plus-button">+</button>
+</div>
 
 <div class="button-group">
     <button type="button" id="confirm-button">
@@ -372,7 +385,9 @@ Scan ulang
     const guestType = document.getElementById('guest-type');
     const guestLimit = document.getElementById('guest-limit');
     const guestStatus = document.getElementById('guest-status');
-    const attendedCount = document.getElementById('attended-count')
+    const attendedCount = document.getElementById('attended-count');
+    const minusButton = document.getElementById('minus-button');
+    const plusButton = document.getElementById('plus-button');
     const confirmationArea = document.getElementById('confirmation-area');
 
     const manualCode = document.getElementById('manual-code');
@@ -382,6 +397,7 @@ Scan ulang
 
     let currentCode = null;
     let scannerLocked = false;
+    let attendanceLimit = 1;
 
     function showStatus(message, type) {
         statusMessage.textContent = message;
@@ -412,17 +428,9 @@ Scan ulang
         }
     }
 
-    function fillAttendanceOptions(limit) {
-        attendedCount.innerHTML = '';
-
-        for (let number =1; number <= limit; number++) {
-            const option = document.createElement('option');
-
-            option.value = number;
-            option.textContent = `${number} orang`;
-
-            attendedCount.appendChild(option);
-        }
+    function SetUpAttendanceCounter(limit) {
+            attendanceLimit = limit;
+            attendedCount.textContent = '1';
     }
 
     function displayGuest(guest) {
@@ -437,7 +445,7 @@ Scan ulang
         guestLimit.textContent = `${guest.invitation_limit} orang`;
         guestStatus.textContent = 'Belum check-in';
 
-         fillAttendanceOptions(guest.invitation_limit);
+         SetUpAttendanceCounter(guest.invitation_limit);
 
         confirmationArea.style.display = 'block';
         resultCard.style.display = 'block';
@@ -513,6 +521,8 @@ async function findGuest(rawCode) {
 
             displayGuest(data.guest);
         } catch (error) {
+             console.error('findGuest error:', error);
+
             showStatus(
                 'Gagal menghubungi server. silahkan coba kembali',
                 'error'
@@ -533,7 +543,7 @@ async function findGuest(rawCode) {
 
             try {
                 const response = await fetch(
-                    `/admin/guest/${encodeURlComponent(currentCode)}/confirm`, 
+                    `/admin/guest/${encodeURIComponent(currentCode)}/confirm`, 
                     {
                         method: 'POST',
                         headers: {
@@ -542,7 +552,7 @@ async function findGuest(rawCode) {
                             'X-CSRF-TOKEN': csrfToken 
                         },
                         body:JSON.stringify({
-                            attended_count: Number(attendedCount.value)
+                            attended_count: Number(attendedCount.textContent)
                         })
                     }
 );
@@ -590,6 +600,7 @@ showStatus(
     'success'
 );
 } catch (error) {
+    console.error('confirmAttendance error:', error);
     showStatus(
         'Gagal menyimpan kehadiran, silahkan coba lagi.',
         'error'
@@ -638,6 +649,24 @@ showStatus(
                 findGuest(manualCode.value);
             }
 
+        });
+
+        plusButton.addEventListener('click', function (){
+            let count = Number(attendedCount.textContent);
+
+            if (count < attendanceLimit) {
+                count++;
+                attendedCount.textContent = count;
+            }
+        });
+
+        minusButton.addEventListener('click', function (){
+            let count = Number(attendedCount.textContent);
+
+            if (count > 1) {
+                count--;
+                attendedCount.textContent = count;
+            }
         });
 
         confirmButton.addEventListener('click', confirmAttendance);
