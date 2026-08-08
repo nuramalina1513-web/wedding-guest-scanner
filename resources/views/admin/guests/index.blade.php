@@ -151,6 +151,33 @@
                 text-align: center;
                 color: #8a6468;
             }
+
+            .filters {
+                display: flex;
+                gap: 10px;
+                margin-button: 18px;
+            }
+
+            .filters input,
+            .filters select {
+                padding: 11px 12px;
+
+                border: 1px solid #dbb98c;
+                border-radius:10px;
+
+                background: #fffaf3;
+                color: #4d2027;
+
+                font-size: 13px;
+            }
+
+            .filters input {
+                flex: 1;
+            }
+
+            .filters select {
+                min-width: 160px;
+            }
         </style>
     </head>
 
@@ -177,6 +204,26 @@
 </a>
 </div>
 
+<div class="filter">
+    <input
+     type="text"
+     id="guest-search"
+     placeholder="Cari nama atau Qr ..."
+     >
+
+     <select id="type-filter">
+     <option value="all">Semua Tipe</option>
+     <option value="vip">VIP</option>
+     <option value="regular">Regular</option>
+     </select>
+
+    <select id="status-filter">
+        <option value="all">Semua Status</option>
+        <option value="checked-in">Sudah Check-in</option>
+        <option value="waiting">Belum Check-in</option>
+    </select>
+</div>
+
 <div class="table-card">
 
 @if ($guests->count() > 0)
@@ -198,7 +245,11 @@
 
         @foreach ($guests as $guest)
 
-        <tr>
+        <tr 
+            class="guest-row"
+            data-type="{{ $guest->guest_type }}"
+            data-status="{{ $guest->scanned_at ? 'checked-in' : 'waiting' }}"
+            >
             <td>
                 {{ $guest->name }}
             </td>
@@ -260,5 +311,45 @@
 
             </div>
         </div>
+
+        <script>
+            const guestSearch = document.getElementById('guest-search');
+            const typeFilter = document.getElementById('type-filter');
+            const statusFilter = document.getElementById('status-filter');
+            const guestRows = document.querySelectorAll('.guest-row');
+
+            function filterGuests() {
+                const searchValue = guestSearch.value.toLowerCase();
+                const typeValue = typeFilter.value;
+                const statusValue = statusFilter.value;
+
+                guestRows.forEach(function (row) {
+                    const rowText = row.textContent.toLowerCase();
+                    const rowType = row.dataset.type;
+                    const rowStatus = row.dataset.status;
+
+                    const matchSearch = rowText.includes(searchValue);
+
+                    const matchType =
+                    typeValue === 'all' ||
+                    rowType === typeValue;
+
+                    const matchStatus = 
+                    statusValue === 'all' ||
+                    rowStatus === statusValue;
+
+                    if (matchSearch && matchType && matchStatus) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+            }
+
+            guestSearch.addEventListener('input', filterGuests);
+            typeFilter.addEventListener('change', filterGuests);
+            statusFilter.addEventListener('change', filterGuests);
+        </script>
     </body>
     </html>
