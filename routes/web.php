@@ -40,3 +40,9 @@ Route::delete('/admin/guests/{guest}', [AdminController::class, 'deleteGuest'])
 
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
 ->name('admin.dashboard');
+
+Route::get('/admin/guests/import', [AdminController::class, 'importGuests'])
+->name('admin.guests.import');
+
+Route::post('/admin/guests/import', [AdminController::class, 'storeImportGuests'])
+->name('admin.guests.import.store');

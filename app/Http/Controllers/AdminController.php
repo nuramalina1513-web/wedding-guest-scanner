@@ -27,13 +27,20 @@ class AdminController extends Controller
             'invitation_limit' => 'required|integer|min:1',
         ]);
 
-        $lastGuest = Guest::orderBy('id', 'desc')->first();
+        $lastCode = Guest::where('code', 'like', 'WED-ARIFA-%')
+        ->orderBy('code', 'desc')
+        ->value('code');
 
-        $nextNumber = $lastGuest
-        ? $lastGuest->id + 1
+        $nextNumber = $lastCode
+        ? ((int) substr($lastCode, -3)) + 1
         : 1;
 
-        $code = 'WED-ARIFA-' .str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+        $code = 'WED-ARIFA-' .str_pad(
+            $nextNumber, 
+            3, 
+            '0', 
+            STR_PAD_LEFT
+            );
 
         $guest = Guest::create([
             'name' => $validated['name'],
@@ -56,7 +63,7 @@ class AdminController extends Controller
 
         if (!$guest){
             return response()->json([
-                'message' => "Data Tamu Tidak Ditemukan.",
+                'message' => "Data Tamu berhasil Ditemukan.",
             ], 404);
         }
 
@@ -178,6 +185,80 @@ class AdminController extends Controller
         'totalReguler'
         ));
 
+    }
+
+    public function importGuests(): View
+    {
+        return view('admin.guests.import');
+    }
+
+    public function storeImportGuests(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
+        ]);
+
+        $file = $request->file('csv_file');
+        $handle = fopen($file->getRealPath(), 'r');
+
+        //lewati header csv
+        fgetcsv($handle);
+
+        $importedCount = 0;
+
+        while (($row = fgetcsv($handle)) !== false){
+
+        if (count($row) < 3){
+            continue;
+        }
+
+        $name= trim($row[0]);
+        $guestType = strtolower(trim($row[1]));
+        $invitationLimit = (int) trim($row[2]);
+
+        if (
+            $name === '' ||
+            ! in_array($guestType, ['reguler', 'vip']) ||
+            $invitationLimit < 1
+        ) {
+            continue;
+        }
+
+        $lastCode = Guest::where('code', 'like', 'WED-ARIFA-%')
+        ->orderBy('code', 'desc')
+        ->value('code');
+
+        $nextNumber = $lastCode
+        ? ((int) substr($lastCode, -3)) + 1
+        : 1;
+
+        $code = 'WED-ARIFA-' . str_pad(
+            $nextNumber,
+            3,
+            '0',
+            STR_PAD_LEFT
+        );
+
+        Guest::create([
+            'name' => $name,
+            'code' => $code,
+            'guest_type' => $guestType,
+            'invitation_limit' => $invitationLimit,
+            'attended_count' => 0,
+            'scanned_at' => null,
+        ]);
+
+        $importedCount++;
+        }
+
+        fclose($handle);
+
+        return redirect()
+        ->route('admin.guests.index')
+        ->with(
+            'success',
+            $importedCount . ' tamu berhasil diimport.'
+        );
     }
 
 }

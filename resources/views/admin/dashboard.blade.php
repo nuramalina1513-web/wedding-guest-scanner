@@ -213,7 +213,7 @@
             <div class="stat-card reguler-card">
                 <div class="stat-label">Tamu Reguler</div>
                 <p class="stat-number">{{ $totalReguler }}</p>
-                <div class="stat-unit">Orang</div>
+                <div class="stat-unit">Undangan</div>
             </div>
 
         </div>
