@@ -239,6 +239,18 @@
                 background: transparent;
                 color: #821f35;
             }
+
+            .reset-button {
+                padding: 7px 10px;
+
+                background: #a46a13;
+                border: 1px solid #a46a13;
+                border-radius: 8px;
+
+                color: white;
+                font-size: 12px;
+                cursor: pointer;
+            }
         </style>
     </head>
 
@@ -375,6 +387,24 @@
                 >
                     Edit
                 </a>
+                @if ($guest->scanned_at)
+
+                <form
+                 action="{{ route('admin.guests.reset-checkin', $guest)  }}"
+                 method="POST"
+                 onsubmit="return confirm('Reset check-in tamu ini?')"
+                 >
+                    @csrf
+                    @method('PATCH')
+
+                    <button 
+                    type="submit"
+                    class="reset-button"
+                    >
+                        Reset
+                    </button>
+                </form>
+            @endif
                 <form 
             action="{{ route('admin.guests.delete', $guest) }}"
             method="POST"

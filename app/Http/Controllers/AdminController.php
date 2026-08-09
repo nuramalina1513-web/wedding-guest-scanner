@@ -261,4 +261,19 @@ class AdminController extends Controller
         );
     }
 
+    public function resetCheckIn(Guest $guest)
+    {
+        $guest->update([
+            'attended_count'=> 0,
+            'scanned_at' => null,
+        ]);
+
+        return redirect ()
+            ->route('admin.guests.index')
+            ->with(
+                'success',
+                'Check-in tamu ' . $guest->name . ' berhasil direset.'
+            );
+    }
+
 }
