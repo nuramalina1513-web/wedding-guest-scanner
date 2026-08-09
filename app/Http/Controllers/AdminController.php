@@ -298,7 +298,7 @@ class AdminController extends Controller
             'Jumlah Hadir',
             'Status',
             'Waktu Check-in',
-        ]);
+        ], ';');
 
         foreach ($guests as $guest) {
 
@@ -312,7 +312,7 @@ class AdminController extends Controller
                 $guest->scanned_at
                 ? $guest->scanned_at->format('d-m-y H:i:s')
                 : '-',
-            ]);
+            ], ';');
         }
 
         fclose($handle);

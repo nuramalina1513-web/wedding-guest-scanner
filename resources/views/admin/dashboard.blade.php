@@ -133,6 +133,10 @@
                 .stats-grid {
                     grid-template-columns: 1fr; 
                 }
+
+                .action-form {
+                    margin: 0;
+                }
             }
         </style>
     </head>
@@ -166,6 +170,20 @@
         >
             Scan Tamu
         </a>
+
+        <form 
+        action="{{ route('admin.logout') }}"
+        method="POST"
+        >
+            @csrf
+
+            <button 
+            type="submit"
+            class="action-button secondary"
+            >
+                Logout
+            </button>
+        </form>
 
         </div>
 

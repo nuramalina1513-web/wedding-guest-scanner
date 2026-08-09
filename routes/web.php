@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\AdminAuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -10,6 +11,16 @@ Route::get('/', function () {
 
 Route::get('/tamu/{code}', [GuestController::class, 'show'])
 ->name('guest.show');
+
+Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])
+->name('login');
+
+Route::post('/admin/login', [AdminAuthController::class, 'login'])
+->name('admin.login');
+
+Route::middleware('auth')->group(function () {
+
+//semua route admin taruh di sini
 
 Route::get('/admin/scan', [AdminController::class, 'index'])
 ->name('admin.scan');
@@ -52,3 +63,8 @@ Route::patch('/admin/guests/{guest}/reset-checkin', [AdminController::class, 're
 
 Route::get('/admin/guests/export', [AdminController::class, 'exportGuests'])
 ->name('admin.guests.export');
+
+Route::post('/admin/logout', [AdminAuthController::class, 'logout'])
+->name('admin.logout');
+
+});
