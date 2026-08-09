@@ -152,4 +152,32 @@ class AdminController extends Controller
         ->with('success', 'Tamu ' . $guestName . ' berhasil dihapus.');
     }
 
+    public function dashboard(): view
+    {
+        $totalGuests = Guest::count();
+
+        $totalInvitation = Guest::sum('invitation_limit');
+
+        $checkedIn = Guest::whereNotNull('scanned_at')->count();
+
+        $notCheckedIn = Guest::whereNull('scanned_at')->count();
+
+        $totalAttended = Guest::sum('attended_count');
+
+        $totalVip = Guest::where('guest_type', 'vip')->count();
+
+        $totalReguler = Guest::where('guest_type', 'reguler')->count();
+
+        return view('admin.dashboard', compact(
+        'totalGuests',
+        'totalInvitation',
+        'checkedIn',
+        'notCheckedIn',
+        'totalAttended',
+        'totalVip',
+        'totalReguler'
+        ));
+
+    }
+
 }

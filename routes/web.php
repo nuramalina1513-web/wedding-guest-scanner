@@ -37,3 +37,6 @@ Route::put('/admin/guests/{guest}', [AdminController::class, 'updateGuest'])
 
 Route::delete('/admin/guests/{guest}', [AdminController::class, 'deleteGuest'])
 ->name('admin.guests.delete');
+
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
+->name('admin.dashboard');

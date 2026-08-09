@@ -333,7 +333,7 @@
                 <option value="reguler"
                 {{ $guest->guest_type === 'reguler' ? 'selected' : '' }}
                 >
-                Regular
+                Reguler
 </option>
 
                 <option value="vip"
