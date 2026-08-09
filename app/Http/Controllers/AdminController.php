@@ -276,4 +276,50 @@ class AdminController extends Controller
             );
     }
 
+    public function exportGuests()
+    {
+        $guests = Guest::orderBy('id', 'asc')->get();
+
+        $fileName = 'daftar-tamu.csv';
+
+        return response()->streamDownload(function () use ($guests) {
+
+        $handle = fopen('php://output', 'w');
+
+        //supaya karakter terbaca baik diexcel
+        fwrite($handle, "\XEF\XBB\XBF");
+
+        //header csv
+        fputcsv($handle, [
+            'Nama',
+            'Kode Qr',
+            'Tipe',
+            'Batas Undangan',
+            'Jumlah Hadir',
+            'Status',
+            'Waktu Check-in',
+        ]);
+
+        foreach ($guests as $guest) {
+
+            fputcsv($handle, [
+                $guest->name,
+                $guest->code,
+                strtoupper($guest->guest_type ?? '-'),
+                $guest->invitation_limit,
+                $guest->attended_count,
+                $guest->scanned_at ? 'Sudah Check-in' : 'Belum Check-in',
+                $guest->scanned_at
+                ? $guest->scanned_at->format('d-m-y H:i:s')
+                : '-',
+            ]);
+        }
+
+        fclose($handle);
+
+        }, $fileName, [
+            'content-Type' => 'text/csv; charset=UTF-8',
+        ]);
+    }
+
 }

@@ -251,6 +251,11 @@
                 font-size: 12px;
                 cursor: pointer;
             }
+
+            .export-button {
+                background: transparent;
+                color: #821f35;
+            }
         </style>
     </head>
 
@@ -280,6 +285,12 @@
             class="action-button import-button"
             >
                 Import Tamu
+            </a>
+            <a 
+            href="{{ route('admin.guests.export') }}"
+            class="action-button export-button"
+            >
+                Export CSV
             </a>
             <a
              href="{{ route('admin.scan') }}"

@@ -49,3 +49,6 @@ Route::post('/admin/guests/import', [AdminController::class, 'storeImportGuests'
 
 Route::patch('/admin/guests/{guest}/reset-checkin', [AdminController::class, 'resetCheckIn'])
 ->name('admin.guests.reset-checkin');
+
+Route::get('/admin/guests/export', [AdminController::class, 'exportGuests'])
+->name('admin.guests.export');
