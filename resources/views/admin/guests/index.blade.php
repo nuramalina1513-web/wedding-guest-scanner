@@ -234,6 +234,11 @@
 
                 transition: opacity 0.3s ease;
             }
+
+            .import-button {
+                background: transparent;
+                color: #821f35;
+            }
         </style>
     </head>
 
@@ -258,6 +263,12 @@
             >
                 + Tambah Tamu
 </a>
+            <a 
+            href="{{ route('admin.guests.import') }}"
+            class="action-button import-button"
+            >
+                Import Tamu
+            </a>
             <a
              href="{{ route('admin.scan') }}"
              class="action-button add-button"
