@@ -63,7 +63,7 @@ class AdminController extends Controller
 
         if (!$guest){
             return response()->json([
-                'message' => "Data Tamu berhasil Ditemukan.",
+                'message' => "Data Tamu tidak berhasil Ditemukan.",
             ], 404);
         }
 

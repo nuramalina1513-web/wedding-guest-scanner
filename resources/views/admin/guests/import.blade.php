@@ -115,6 +115,53 @@
                     text-decoration: none;
 
                     font-size: 13px;
+
+                @media (max-width: 600px;){
+
+                    body {
+                        padding: 25px 12px;
+                    } 
+
+                    .header h1 {
+                        font-size: 28px;
+                    }
+
+                    .actions {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 8px;
+                    }
+
+                    .action-button {
+                        text-align: center;
+                        padding: 10px 8px;
+                        font-size: 12px;
+                    }
+
+                    .filter {
+                        flex-direction: column;
+                        gap: 7px;
+                    }
+
+                    .filters-input,
+                    .filters-select {
+                        width: 100%;
+                    }
+
+                    .table-card {
+                        overflow-x: auto;
+                    }
+
+                    table {
+                        min-width: 780px;
+                    }
+
+                    th,
+                    td {
+                        padding: 12px 10px;
+                        white-space: nowrap;
+                    }
+                }
 }
             </style>
     </head>
